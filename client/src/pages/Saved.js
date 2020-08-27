@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 import API from "../utils/API";
 import { Col, Row, Container } from "../components/Grid";
 import { List } from "../components/List";
+import "./homestyle.css";
 
 class Saved extends Component {
   state = {
@@ -18,21 +19,24 @@ class Saved extends Component {
 
   getSavedBooks = () => {
     API.getSavedBooks()
-      .then((res) =>
+      .then((res) => {
+        console.log(res.data);
         this.setState({
           books: res.data,
-        })
-      )
+        });
+      })
       .catch((err) => console.log(err));
   };
 
   handleBookDelete = (id) => {
+    console.log("key to delete");
+    console.log(id);
     API.deleteBook(id).then((res) => this.getSavedBooks());
   };
 
   render() {
     return (
-      <Container>
+      <Container fluid>
         <Row>
           <Col size="md-12">
             <Jumbotron>
@@ -50,7 +54,7 @@ class Saved extends Component {
                 <List>
                   {this.state.books.map((book) => (
                     <Book
-                      key={book._id}
+                      key={book.id}
                       title={book.title}
                       subtitle={book.subtitle}
                       link={book.link}
@@ -59,7 +63,7 @@ class Saved extends Component {
                       image={book.image}
                       Button={() => (
                         <button
-                          onClick={() => this.handleBookDelete(book._id)}
+                          onClick={() => this.handleBookDelete(book.id)}
                           className="btn btn-danger ml-2"
                         >
                           Delete

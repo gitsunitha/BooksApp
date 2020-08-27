@@ -3,9 +3,18 @@ import { ListItem } from "../List";
 import { Row, Col } from "../Grid";
 import "./style.css";
 
-function Book({ title, subtitle, authors, link, description, image, Button }) {
+function Book({
+  objId,
+  title,
+  subtitle,
+  authors,
+  link,
+  description,
+  image,
+  Button,
+}) {
   return (
-    <ListItem>
+    <ListItem key={objId}>
       <Row className="flex-wrap-reverse">
         <Col size="md-8">
           <h3 className="font-italic">{title}</h3>

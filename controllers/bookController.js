@@ -1,9 +1,8 @@
-const db = require("../models");
-const BookDb = db.Book;
+const mongoose = require("mongoose");
+const BookDb = require("../models/Book");
 
 module.exports = {
   findAllBooks: function (req, res) {
-    console.log(req.query);
     BookDb.find({})
       .then((dbModel) => res.json(dbModel))
       .catch((err) => res.status(422).json(err));

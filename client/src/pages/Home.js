@@ -7,6 +7,7 @@ import Footer from "../components/Footer";
 import API from "../utils/API";
 import { Col, Row, Container } from "../components/Grid";
 import { List } from "../components/List";
+import "./homestyle.css";
 
 class Home extends Component {
   state = {
@@ -22,14 +23,45 @@ class Home extends Component {
     });
   };
 
+  checkIfSaved = () => {
+    let savedBooks = [];
+    API.getSavedBooks()
+      .then((res) => {
+        savedBooks = res.data;
+        console.log("saved Books");
+        console.log(savedBooks);
+        let currentState = this.state.books;
+        console.log(this.state.books);
+        this.setState({
+          books: currentState.map((searchedBook) => {
+            console.log(searchedBook);
+            let filteredArray = [];
+            filteredArray = savedBooks.filter(
+              savedBooks.googleId === searchedBook.googleId
+            );
+            if (filteredArray.length > 1) {
+              searchedBook.savedFlag = true;
+              console.log("found a saved book");
+            }
+            return searchedBook;
+          }),
+        });
+      })
+      .catch((err) => {
+        //empty array. should check for sql errors maybe?
+      });
+  };
+
   getBooks = () => {
-    console.log(this.state.q);
     API.getBooks(this.state.q)
       .then((res) => {
-        console.log("returned from api");
-        console.log(res.data);
+        console.log("Inside the Home.getBooks");
         this.setState({
-          books: res.data,
+          books: res.data.map(function (book) {
+            book.savedFlag = false;
+            console.log(book);
+            return book;
+          }, this.checkIfSaved),
         });
       })
       .catch(() =>
@@ -38,11 +70,12 @@ class Home extends Component {
           message: "No New Books Found, Try a Different Query",
         })
       );
+    //now check if already saved
+    this.checkIfSaved();
   };
 
   handleFormSubmit = (event) => {
     event.preventDefault();
-    console.log("handle submit");
     this.getBooks();
   };
 
@@ -98,6 +131,7 @@ class Home extends Component {
                       image={book.volumeInfo.imageLinks.thumbnail}
                       Button={() => (
                         <button
+                          disabled={book.savedFlag}
                           onClick={() => this.handleBookSave(book.id)}
                           className="btn btn-primary ml-2"
                         >

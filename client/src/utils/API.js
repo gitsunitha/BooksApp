@@ -7,7 +7,8 @@ export default {
   },
   // Gets all saved books
   getSavedBooks: function () {
-    return axios.get("/api/books");
+    const axiosreturnVal = axios.get("/api/books");
+    return axiosreturnVal;
   },
   // Deletes the saved book with the given id
   deleteBook: function (id) {

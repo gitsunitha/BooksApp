@@ -2,8 +2,6 @@ const axios = require("axios");
 
 module.exports = {
   search: function (req, res) {
-    console.log("test");
-    console.log(req);
     const { query: params } = req;
     axios
       .get("https://www.googleapis.com/books/v1/volumes", {
@@ -13,6 +11,7 @@ module.exports = {
         res.json(
           results.data.items.filter(
             (result) =>
+              result.id &&
               result.volumeInfo.title &&
               result.volumeInfo.infoLink &&
               result.volumeInfo.authors &&

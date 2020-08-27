@@ -1,4 +1,7 @@
 .jumbotron {
   padding: 100px;
   margin: 0;
+  background-image: url("../../assets/library.jpg");
+  background-position: center;
+  background-size: cover;
 }
